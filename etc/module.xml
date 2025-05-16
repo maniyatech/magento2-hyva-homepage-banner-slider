@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * ManiyaTech
+ *
+ * @author        Milan Maniya
+ * @package       ManiyaTech_HyvaHomepageBannerSlider
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="ManiyaTech_HyvaHomepageBannerSlider">
+        <sequence>
+            <module name="ManiyaTech_HomepageBannerSlider"/>
+            <module name="Hyva_CompatModuleFallback"/>
+        </sequence>
+    </module>
+</config>

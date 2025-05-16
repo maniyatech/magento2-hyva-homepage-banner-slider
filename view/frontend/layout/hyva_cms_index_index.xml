@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * ManiyaTech
+ *
+ * @author        Milan Maniya
+ * @package       ManiyaTech_HyvaHomepageBannerSlider
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <remove src="ManiyaTech_HomepageBannerSlider::js/HomepageBannerSlider.js"/>
+        <remove src="ManiyaTech_HomepageBannerSlider::css/owl.carousel.min.css"/>
+        <remove src="ManiyaTech_HomepageBannerSlider::css/owl.theme.default.min.css"/>
+        <css src="ManiyaTech_HyvaHomepageBannerSlider::css/splide.min.css"/>
+        <script src="ManiyaTech_HyvaHomepageBannerSlider::js/splide.min.js"/>
+    </head>
+</page>

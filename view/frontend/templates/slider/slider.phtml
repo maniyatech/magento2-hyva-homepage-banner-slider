@@ -1,0 +1,115 @@
+<?php
+/**
+ * ManiyaTech
+ *
+ * @author        Milan Maniya
+ * @package       ManiyaTech_HyvaHomepageBannerSlider
+ */
+
+/** @var \ManiyaTech\HomepageBannerSlider\Block\Bannerslider\Slider $block */
+$collection = $block->getSliderCollection();
+$mediaUrl = $block->getMediaUrl() . 'ManiyaTech/Slider/';
+
+if (!$collection->getSize()) {
+    return;
+}
+
+$sliderLoop = (bool) $block->getSliderLoop();
+$sliderDots = (bool) $block->getSliderDots();
+$sliderArrow = (bool) $block->getSliderArrow();
+$sliderAutoplay = (bool) $block->getSliderAutoplay();
+$sliderDesktopItem = (int) $block->getDesktopItemCount();
+$sliderMobileItem = (int) $block->getMobileItemCount();
+$sliderAutoPlaySpeed = (int) $block->getSliderAutoplayTiming();
+?>
+<section id="main-slider" class="splide" aria-label="Main Slider">
+    <div class="splide__track">
+        <ul class="splide__list">
+            <?php $count = 0; foreach ($collection as $index => $slider):
+                $imagePriority = $count === 0
+                    ? "fetchpriority='high' loading='eager'"
+                    : "fetchpriority='low' loading='lazy'";
+                $title = $slider->getTitle();
+                $desktopImage = $slider->getDesktopImage();
+                $mobileImage = $slider->getMobileImage() ?: $desktopImage;
+                $desktopTitle = $slider->getDesktopSliderTitle();
+                $mobileTitle = $slider->getMobileSliderTitle() ?: $desktopTitle;
+                $hasButton = (bool) $slider->getEnableButton();
+                $buttonTitle = $slider->getButtontitle();
+                $url = $slider->getUrlKey() ?: 'javascript:void(0)';
+                $openNewTab = (bool) $slider->getOpenNewTab();
+                $targetAttr = $openNewTab ? ' target="_blank" rel="noopener noreferrer"' : '';
+
+                $textPositionClass = $hasButton
+                ? match ($slider->getTextPosition()) {
+                    'top-left' => 'items-start justify-start',
+                    'top-right' => 'items-start justify-end',
+                    'bottom-left' => 'items-end justify-start',
+                    'bottom-right' => 'items-end justify-end',
+                    default => 'items-center justify-center',
+                }
+                : 'items-center justify-center';
+    ?>
+                <li class="splide__slide w-full h-450 overflow-hidden">
+                    <picture>
+                        <source media="(max-width: 767px)" 
+                                srcset="<?= $escaper->escapeUrl($mediaUrl . $mobileImage) ?>">
+                        <img src="<?= $escaper->escapeUrl($mediaUrl . $desktopImage) ?>"
+                             alt="<?= $escaper->escapeHtmlAttr($title) ?>"
+                             title="<?= $escaper->escapeHtmlAttr($title) ?>"
+                             class="w-full h-450 object-cover block"
+                             <?= /* @noEscape */ $imagePriority ?>>
+                    </picture>
+
+                    <div class="absolute inset-0 p-5 flex <?= /* @noEscape */ $textPositionClass ?> text-center">
+                        <div>
+                            <h3 class="text-white text-fs-28 mb-6 hidden md:block">
+                                <?= /* @noEscape */ $desktopTitle ?>
+                            </h3>
+                            <h3 class="text-white text-fs-28 mb-6 block md:hidden">
+                                <?= /* @noEscape */ $mobileTitle ?>
+                            </h3>
+                            <?php if ($hasButton): ?>
+                                <a href="<?= $escaper->escapeUrl($url) ?>"
+                                   class="btn btn-primary font-bold"
+                                   title="<?= $escaper->escapeHtmlAttr($buttonTitle) ?>"
+                                   <?= /* @noEscape */ $targetAttr ?>>
+                                    <?= /* @noEscape */ $buttonTitle ?>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </li>
+                <?php $count++; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const mobileItems = <?= /* @noEscape */ $sliderMobileItem ?>;
+    const desktopItems = <?= /* @noEscape */ $sliderDesktopItem ?>;
+    const loop = <?= /* @noEscape */ $sliderLoop ? 'true' : 'false' ?>;
+    const dots = <?= /* @noEscape */ $sliderDots ? 'true' : 'false' ?>;
+    const nav = <?= /* @noEscape */ $sliderArrow ? 'true' : 'false' ?>;
+    const autoplay = <?= /* @noEscape */ $sliderAutoplay ? 'true' : 'false' ?>;
+    const autoplayTimeout = <?= /* @noEscape */ $sliderAutoPlaySpeed ?>;
+
+    new Splide('#main-slider', {
+        type: loop ? 'loop' : 'slide',
+        perPage: desktopItems,
+        arrows: nav,
+        pagination: dots,
+        autoplay: autoplay,
+        interval: autoplayTimeout,
+        pauseOnHover: true,
+        breakpoints: {
+            768: {
+                perPage: mobileItems,
+                arrows: false
+            }
+        }
+    }).mount();
+});
+</script>
